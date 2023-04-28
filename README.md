@@ -2,7 +2,7 @@
 
 <h1>Template | Worker</h1>
 
-[![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_build.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_build.yml)
+[![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml)
 
 🚀 | A simple worker that can be used as a starting point to build your own custom RunPod Endpoint API worker.
 </div>
