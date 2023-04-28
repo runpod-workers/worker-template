@@ -1,4 +1,4 @@
-FROM BASE_IMAGE=runpod/pytorch:3.10-2.0.0-117
+FROM runpod/pytorch:3.10-2.0.0-117
 
 WORKDIR /
 
