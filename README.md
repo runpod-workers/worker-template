@@ -17,9 +17,14 @@
 
 ### CI/CD
 
-This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add your DockerHub credentials `DOCKERHUB_USERNAME` & `DOCKERHUB_TOKEN` to the GitHub Secrets for this repository to enable this functionality.
+This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
 
-You will need to update the `CD-docker_dev.yml` & `CD-docker_release.yml` files to include your DockerHub username and the name of the image you want to build. The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
+- `DOCKERHUB_USERNAME` | Your DockerHub username for logging in.
+- `DOCKERHUB_TOKEN` | Your DockerHub token for logging in.
+- `DOCKERHUB_REPO` | The name of the repository you want to push to.
+- `DOCKERHUB_IMG` | The name of the image you want to push to.
+
+The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
 
 ## Best Practices
 

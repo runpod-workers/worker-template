@@ -1,4 +1,4 @@
-from python:3.11.1-buster
+FROM BASE_IMAGE=runpod/pytorch:3.10-2.0.0-117
 
 WORKDIR /
 
