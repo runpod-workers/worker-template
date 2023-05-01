@@ -13,7 +13,8 @@
 2. Add your code to the `src` directory.
 3. Update the `handler.py` file to load models and process requests.
 4. Add any dependencies to the `requirements.txt` file.
-5. Update the `Dockerfile` to include any additional dependencies.
+5. Add any other build time scripts to the build directory, for example, downloading models.
+6. Update the `Dockerfile` to include any additional dependencies.
 
 ### CI/CD
 
