@@ -1,6 +1,6 @@
 FROM runpod/pytorch:3.10-2.0.0-117
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /
 
