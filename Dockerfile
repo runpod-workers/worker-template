@@ -10,6 +10,7 @@ RUN pip install --upgrade pip && \
     pip install -r /requirements.txt && \
     rm /requirements.txt
 
+# Add src files (Worker Template)
 ADD src .
 
 CMD [ "python", "-u", "/handler.py" ]
