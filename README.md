@@ -30,6 +30,8 @@ This repository is setup to automatically build and push a docker image to the G
 
 The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
 
+The `CI-test_worker.yml` file will test the worker using the input provided by the `--test_input` argument when calling the file containing your handler. Be sure to update this workflow to install any dependencies you need to run your tests.
+
 ## Best Practices
 
 Models should be part of your docker image, this can be accomplished by either copying them into the image or downloading them during the build process.
