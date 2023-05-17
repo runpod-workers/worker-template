@@ -9,9 +9,7 @@ WORKDIR /
 
 # Update and upgrade the system packages (Worker Template)
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get upgrade -y
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
