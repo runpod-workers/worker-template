@@ -13,8 +13,9 @@ RUN apt-get update && \
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /requirements.txt --no-cache-dir && \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    pip install --upgrade -r /requirements.txt --no-cache-dir && \
     rm /requirements.txt
 
 # Add src files (Worker Template)
