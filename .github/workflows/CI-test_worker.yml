@@ -10,6 +10,8 @@ on:
 jobs:
   api_call:
     runs-on: ubuntu-latest
+    outputs:
+      id: ${{ steps.get_id.outputs.id }}
 
     steps:
       - name: Send API Call
@@ -22,8 +24,11 @@ jobs:
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
           data: '{"input":{"start": true}}'
 
-      - name: Get Response
-        run: echo ${{ steps.api_call.outputs.response }}
+      - name: Get ID
+        id: get_id
+        run: |
+          ID=$(echo '${{ steps.api_call.outputs.response }}' | jq -r '.id')
+          echo "::set-output name=runpod_job_id::$ID"
 
   test:
     needs: api_call
@@ -44,3 +49,17 @@ jobs:
       - name: Test Worker
         run: |
           python src/handler.py --test_input='{"input": "test"}'
+
+  cleanup:
+    if: ${{ cancelled() }}
+    needs: api_call
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel Worker
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.runpod.ai/v2/ja1wwbebuah7t5/cancel/${{ needs.api_call.outputs.runpod_job_id }}"
+          method: "POST"
+          customHeaders: '{"Content-Type": "application/json"}'
+          bearerToken: ${{ secrets.RUNPOD_API_KEY }}
