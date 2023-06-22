@@ -52,7 +52,6 @@ jobs:
 
   cleanup:
     if: ${{ cancelled() }}
-    needs: api_call
     runs-on: ubuntu-latest
 
     steps:
