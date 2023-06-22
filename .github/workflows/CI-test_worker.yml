@@ -5,33 +5,37 @@ on:
     branches:
       - main
 
+  pull_request:
+    branches:
+      - main
+
   workflow_dispatch:
 
 jobs:
-  api_call:
+  initialize_worker:
     runs-on: ubuntu-latest
     outputs:
-      id: ${{ steps.get_id.outputs.id }}
+      id: ${{ steps.extract_id.outputs.runpod_job_id }}
 
     steps:
-      - name: Send API Call
-        id: api_call
+      - name: Deploy Worker
+        id: deploy
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api.runpod.ai/v2/ja1wwbebuah7t5/run"
+          url: "https://api.runpod.ai/v2/${{ secrets.RUNPOD_ENDPOINT }}/run"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
           data: '{"input":{"start": true}}'
 
-      - name: Get ID
-        id: get_id
+      - name: Extract Job ID
+        id: extract_id
         run: |
-          ID=$(echo '${{ steps.api_call.outputs.response }}' | jq -r '.id')
+          ID=$(echo '${{ steps.deploy.outputs.response }}' | jq -r '.id')
           echo "::set-output name=runpod_job_id::$ID"
 
-  test:
-    needs: api_call
+  run_tests:
+    needs: initialize_worker
     runs-on: runpod
 
     steps:
@@ -42,23 +46,25 @@ jobs:
         with:
           python-version: "3.11"
 
-      - run: |
+      - name: Install Dependencies
+        run: |
           python -m pip install --upgrade pip
           pip install -r builder/requirements.txt
 
-      - name: Test Worker
+      - name: Execute Tests
         run: |
           python src/handler.py --test_input='{"input": "test"}'
 
-  cleanup:
-    if: ${{ cancelled() }}
+  terminate_worker:
+    if: ${{ cancelled() || failure() }}
+    needs: initialize_worker
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cancel Worker
+      - name: Shutdown Worker
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api.runpod.ai/v2/ja1wwbebuah7t5/cancel/${{ needs.api_call.outputs.runpod_job_id }}"
+          url: "https://api.runpod.ai/v2/${{ secrets.RUNPOD_ENDPOINT }}/cancel/${{ needs.initialize_worker.outputs.id }}"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
