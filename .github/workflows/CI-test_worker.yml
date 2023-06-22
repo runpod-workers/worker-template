@@ -8,7 +8,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  api_call:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send API Call
+        id: api_call
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: "https://api.runpod.ai/v2/ja1wwbebuah7t5/run"
+          method: "POST"
+          customHeaders: '{"Content-Type": "application/json"}'
+          bearerToken: ${{ secrets.RUNPOD_API_KEY }}
+          data: '{"input":{"start": true}}'
+
+      - name: Get Response
+        run: echo ${{ steps.api_call.outputs.response }}
+
   test:
+    needs: api_call
     runs-on: runpod
 
     steps:
