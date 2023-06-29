@@ -32,7 +32,9 @@ The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, 
 
 The `CI-test_worker.yml` file will test the worker using the input provided by the `--test_input` argument when calling the file containing your handler. Be sure to update this workflow to install any dependencies you need to run your tests.
 
-## Best Practices
+## 💡 | Best Practices
+
+System dempendency installation, model caching, and other shell tasks should be added to the `builder/setup.sh` this will allow you to easily setup your Dockerfile as well as run CI/CD tasks.
 
 Models should be part of your docker image, this can be accomplished by either copying them into the image or downloading them during the build process.
 

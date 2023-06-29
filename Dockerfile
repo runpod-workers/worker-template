@@ -1,5 +1,5 @@
 # Base image
-FROM runpod/pytorch:3.10-2.0.0-117
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 
 # Use bash shell with pipefail option
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -8,13 +8,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 WORKDIR /
 
 # Update and upgrade the system packages (Worker Template)
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y software-properties-common && \
-    apt-get autoremove -y && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/*
-
+COPY builder/setup.sh /setup.sh
+RUN chmod +x /setup.sh && \
+    /setup.sh && \
+    rm /setup.sh
 
 # Install Python dependencies (Worker Template)
 COPY builder/requirements.txt /requirements.txt
