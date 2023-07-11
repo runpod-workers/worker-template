@@ -13,6 +13,5 @@ add-apt-repository ppa:deadsnakes/ppa -y
 apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-distutils
 
 
-
 # Clean up
 apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
