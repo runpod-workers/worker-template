@@ -8,7 +8,7 @@ apt-get update && apt-get upgrade -y
 # - openssh-server: for ssh access and web terminal
 apt-get install -y \
     software-properties-common \
-    python3 python3-pip python-is-python3 \
+    python3.10 python3-pip python-is-python3 \
     openssh-server
 
 
