@@ -24,4 +24,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Add src files (Worker Template)
 ADD src .
 
-CMD python -u /handler.py
+CMD python3 -u /handler.py

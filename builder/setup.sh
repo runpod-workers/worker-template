@@ -10,7 +10,7 @@ apt-get install -y software-properties-common openssh-server
 
 # Install Python 3.10
 add-apt-repository ppa:deadsnakes/ppa -y
-apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-distutils
+apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-distutils python3.10-pip
 
 
 # Clean up
