@@ -9,8 +9,7 @@ WORKDIR /
 
 # Update and upgrade the system packages (Worker Template)
 COPY builder/setup.sh /setup.sh
-RUN chmod +x /setup.sh && \
-    ./setup.sh && \
+RUN /bin/bash /setup.sh && \
     rm /setup.sh
 
 # Install Python dependencies (Worker Template)
