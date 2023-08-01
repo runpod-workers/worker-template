@@ -2,8 +2,6 @@ name: CD | Dev Docker Image
 
 on:
   push:
-    branches:
-      - "main"
 
 jobs:
   docker:
@@ -28,8 +26,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Determine Docker tag
+        id: docker-tag
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "DOCKER_TAG=dev" >> $GITHUB_ENV
+          else
+            echo "DOCKER_TAG=${{ github.sha }}" >> $GITHUB_ENV
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
+          tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ env.DOCKER_TAG }}
