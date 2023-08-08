@@ -25,6 +25,9 @@ This repository is setup to automatically build and push a docker image to the G
 
 - `DOCKERHUB_USERNAME` | Your DockerHub username for logging in.
 - `DOCKERHUB_TOKEN` | Your DockerHub token for logging in.
+
+Additionally, the following need to be added as GitHub actions variables:
+
 - `DOCKERHUB_REPO` | The name of the repository you want to push to.
 - `DOCKERHUB_IMG` | The name of the image you want to push to.
 
@@ -34,7 +37,7 @@ The `CI-test_worker.yml` file will test the worker using the input provided by t
 
 ## 💡 | Best Practices
 
-System dempendency installation, model caching, and other shell tasks should be added to the `builder/setup.sh` this will allow you to easily setup your Dockerfile as well as run CI/CD tasks.
+System dependency installation, model caching, and other shell tasks should be added to the `builder/setup.sh` this will allow you to easily setup your Dockerfile as well as run CI/CD tasks.
 
 Models should be part of your docker image, this can be accomplished by either copying them into the image or downloading them during the build process.
 
