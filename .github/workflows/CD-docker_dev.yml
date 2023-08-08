@@ -2,6 +2,8 @@ name: CD | Dev Docker Image
 
 on:
   push:
+    branches-ignore:
+      - "refs/tags/*"
 
 jobs:
   docker:
