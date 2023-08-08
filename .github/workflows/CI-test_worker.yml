@@ -22,7 +22,7 @@ jobs:
         id: deploy
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api.runpod.ai/v2/${{ secrets.RUNPOD_ENDPOINT }}/run"
+          url: "https://api.runpod.ai/v2/${{ vars.RUNPOD_ENDPOINT }}/run"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
@@ -64,7 +64,7 @@ jobs:
       - name: Shutdown Worker
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api.runpod.ai/v2/${{ secrets.RUNPOD_ENDPOINT }}/cancel/${{ needs.initialize_worker.outputs.id }}"
+          url: "https://api.runpod.ai/v2/${{ vars.RUNPOD_ENDPOINT }}/cancel/${{ needs.initialize_worker.outputs.id }}"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
