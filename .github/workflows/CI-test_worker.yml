@@ -14,13 +14,14 @@ on:
 jobs:
   launch_runner_worker:
     runs-on: ubuntu-latest
+
     outputs:
       id: ${{ steps.extract_id.outputs.runpod_job_id }}
 
     steps:
       - name: Deploy Worker
-        id: deploy
         uses: fjogeleit/http-request-action@v1
+        id: deploy
         with:
           url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/run"
           method: "POST"
@@ -47,6 +48,8 @@ jobs:
           python-version: "3.11"
 
       - name: Install Dependencies
+        env:
+          PIP_ROOT_USER_ACTION: "ignore"
         run: |
           python -m pip install --upgrade pip
           pip install -r builder/requirements.txt
@@ -55,13 +58,13 @@ jobs:
         run: |
           python src/handler.py --test_input='{"input": "test"}'
 
-  terminate_worker:
+  cleanup:
     if: ${{ always() && !success() }}
     needs: launch_runner_worker
     runs-on: ubuntu-latest
 
     steps:
-      - name: Shutdown Worker
+      - name: Terminate and Shutdown Worker
         uses: fjogeleit/http-request-action@v1
         with:
           url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/cancel/${{ needs.launch_runner_worker.outputs.id }}"
