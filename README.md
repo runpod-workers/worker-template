@@ -2,7 +2,7 @@
 
 <h1>Template | Worker</h1>
 
-[![CI | Test Worker](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_worker.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_worker.yml)
+[![CI | Test Handler](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml)
 &nbsp;
 [![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml)
 
@@ -19,7 +19,23 @@
 6. Add any other build time scripts to the`builder` directory, for example, downloading models.
 7. Update the `Dockerfile` to include any additional dependencies.
 
-### CI/CD - GitHub Actions
+### ⚙️ | CI/CD (GitHub Actions)
+
+As a reference this repository provides example CI/CD workflows to help you test your worker and build a docker image. The three main workflows are:
+
+1. `CI-test_handler.yml` - Tests the handler using the input provided by the `--test_input` argument when calling the file containing your handler.
+
+### Test Handler
+
+This workflow will validate that your handler works as expected.
+
+The action expects the following arguments to be available:
+
+- `vars.RUNNER_24GB` | The endpoint ID on RunPod for a 24GB runner.
+- `secrets.RUNPOD_API_KEY` | Your RunPod API key.
+- `secrets.GH_PAT` | Your GitHub Personal Access Token.
+- `vars.GH_ORG` | The GitHub organization that owns the repository, this is where the runner will be added to.
+
 
 This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
 
