@@ -19,7 +19,7 @@
 6. Add any other build time scripts to the`builder` directory, for example, downloading models.
 7. Update the `Dockerfile` to include any additional dependencies.
 
-### CI/CD
+### CI/CD - GitHub Actions
 
 This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
 
