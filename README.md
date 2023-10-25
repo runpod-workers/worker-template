@@ -27,7 +27,7 @@ As a reference this repository provides example CI/CD workflows to help you test
 
 ### Test Handler
 
-This workflow will validate that your handler works as expected.
+This workflow will validate that your handler works as expected. You may need to add some dependency installations to the `CI-test_handler.yml` file to ensure your handler can be tested.
 
 The action expects the following arguments to be available:
 
@@ -36,6 +36,7 @@ The action expects the following arguments to be available:
 - `secrets.GH_PAT` | Your GitHub Personal Access Token.
 - `vars.GH_ORG` | The GitHub organization that owns the repository, this is where the runner will be added to.
 
+### Test End-to-End
 
 This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
 
