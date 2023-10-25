@@ -4,7 +4,7 @@
 
 [![CI | Test Handler](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml)
 &nbsp;
-[![Docker Image](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CD-docker_dev.yml)
+[![CD | Test End-to-End](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_e2e.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_e2e.yml)
 
 🚀 | A simple worker that can be used as a starting point to build your own custom RunPod Endpoint API worker.
 </div>
