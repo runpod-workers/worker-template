@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  initialize_worker:
+  launch_runner_worker:
     runs-on: ubuntu-latest
     outputs:
       id: ${{ steps.extract_id.outputs.runpod_job_id }}
@@ -35,7 +35,7 @@ jobs:
           echo "::set-output name=runpod_job_id::$ID"
 
   run_tests:
-    needs: initialize_worker
+    needs: launch_runner_worker
     runs-on: runpod
 
     steps:
@@ -57,14 +57,14 @@ jobs:
 
   terminate_worker:
     if: ${{ always() && !success() }}
-    needs: initialize_worker
+    needs: launch_runner_worker
     runs-on: ubuntu-latest
 
     steps:
       - name: Shutdown Worker
         uses: fjogeleit/http-request-action@v1
         with:
-          url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/cancel/${{ needs.initialize_worker.outputs.id }}"
+          url: "https://api.runpod.ai/v2/${{ vars.RUNNER_24GB }}/cancel/${{ needs.launch_runner_worker.outputs.id }}"
           method: "POST"
           customHeaders: '{"Content-Type": "application/json"}'
           bearerToken: ${{ secrets.RUNPOD_API_KEY }}
