@@ -56,7 +56,7 @@ jobs:
 
       - name: Execute Tests
         run: |
-          python src/handler.py --test_input='{"input": "test"}'
+          python src/handler.py --test_input='{"input": {"key": "value"}}'
 
   cleanup:
     if: ${{ always() && !success() }}
