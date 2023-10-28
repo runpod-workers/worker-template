@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ''' Contains the handler function that will be called by the serverless. '''
 
 import runpod
