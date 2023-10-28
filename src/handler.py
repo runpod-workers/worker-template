@@ -1,20 +1,18 @@
-''' Contains the handler function that will be called by the serverless. '''
+""" Example handler file. """
 
 import runpod
 
-# Load models into VRAM here so they can be warm between requests
+# If your handler runs inference on a model, load the model here.
+# You will want models to be loaded into memory before starting serverless.
 
 
-def handler(event):
-    '''
-    This is the handler function that will be called by the serverless.
-    '''
-    print(event)
+def handler(job):
+    """ Handler function that will be used to process jobs. """
+    job_input = job['input']
 
-    # do the things
+    name = job_input.get('name', 'World')
 
-    # return the output that you want to be returned like pre-signed URLs to output artifacts
-    return "Hello World"
+    return f"Hello, {name}!"
 
 
 runpod.serverless.start({"handler": handler})
