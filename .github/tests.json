@@ -1,0 +1,23 @@
+[
+  {
+    "hardwareConfig": {
+      "endpointConfig": {
+        "gpuIds": "ADA_24,AMPERE_16,AMPERE_24,AMPERE_48,AMPERE_80"
+      }
+    },
+    "input": {
+      "name": "Dolly"
+    },
+    "expectedOutput": "Hello, Dolly!"
+  },
+  {
+    "hardwareConfig": {
+      "endpointConfig": {
+        "gpuIds": "ADA_24,AMPERE_16,AMPERE_24,AMPERE_48,AMPERE_80"
+      }
+    },
+    "input": {
+      "name": "DALL-E"
+    }
+  }
+]
