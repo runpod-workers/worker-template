@@ -7,7 +7,7 @@ on:
 
 jobs:
   docker:
-    runs-on: DO
+    runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -26,7 +26,7 @@ jobs:
         with:
           push: true
           tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
-      - uses: actions/checkout@v3
+
       - name: Run Tests
         id: run-tests
         uses: runpod/runpod-test-runner@v1
