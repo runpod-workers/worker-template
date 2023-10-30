@@ -1,0 +1,50 @@
+name: Docker Image
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  docker:
+    runs-on: DO
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        id: run-tests
+        uses: runpod/runpod-test-runner@v1
+        with:
+          image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
+          runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
+          request-timeout: 600
+
+      ## showing how to consume outputs from test runner for further processing
+      - name: Verify Tests
+        env:
+          TOTAL_TESTS: ${{ steps.run-tests.outputs.total-tests }}
+          SUCCESSFUL_TESTS: ${{ steps.run-tests.outputs.succeeded }}
+          RESULTS: ${{ steps.run-tests.outputs.results }}
+        run: |
+          echo "Total tests: $TOTAL_TESTS"
+          echo "Successful tests: $SUCCESSFUL_TESTS"
+          echo "Full results: $RESULTS"
+          if [ "$TOTAL_TESTS" != "$SUCCESSFUL_TESTS" ]; then
+              exit 1
+          fi
