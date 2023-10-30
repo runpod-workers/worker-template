@@ -14,7 +14,7 @@ on:
         default: "dev"
 
 jobs:
-  docker:
+  docker-build:
     runs-on: DO
     # DO is a custom runner deployed on DigitalOcean, only available for workflows under the runpod-workers organization.
     # If you would like to use this workflow, you can replace DO with ubuntu-latest or any other runner.
@@ -39,6 +39,11 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
 
+  dev-test:
+    needs: docker-build
+    runs-on: ubuntu-latest
+
+    steps:
       # Checkout
       - uses: actions/checkout@v4
 
