@@ -1,13 +1,24 @@
-name: CD | Build Docker Image
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
       - "main"
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Docker Image Tag"
+        required: false
+        default: "dev"
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: DO
+    # DO is a custom runner deployed on DigitalOcean, only available for workflows under the runpod-workers organization.
+    # If you would like to use this workflow, you can replace DO with ubuntu-latest or any other runner.
+
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -21,21 +32,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Build and push step
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
+          tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
 
+      # Tests
       - name: Run Tests
+        if: github.event_name != 'release'
         id: run-tests
-        uses: runpod/runpod-test-runner@v1
+        uses: runpod/runpod-test-runner@v2
         with:
-          image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:dev
+          image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
           runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
           request-timeout: 600
 
-      ## showing how to consume outputs from test runner for further processing
+      # Pass/Fail
       - name: Verify Tests
         env:
           TOTAL_TESTS: ${{ steps.run-tests.outputs.total-tests }}
