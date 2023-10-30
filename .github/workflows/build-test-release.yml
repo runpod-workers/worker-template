@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: CD | Build-Test-Release
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
       - name: Run Tests
         if: github.event_name != 'release'
         id: run-tests
-        uses: runpod/runpod-test-runner@v2
+        uses: direlines/runpod-test-runner@v1.7
         with:
           image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
           runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
