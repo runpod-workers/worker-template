@@ -43,7 +43,7 @@ jobs:
       - name: Run Tests
         if: github.event_name != 'release'
         id: run-tests
-        uses: direlines/runpod-test-runner@v1.7
+        uses: direlines/runpod-test-runner@v1
         with:
           image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
           runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
