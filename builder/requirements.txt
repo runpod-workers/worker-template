@@ -5,4 +5,4 @@
 # git+https://github.com/runpod/runpod-python.git
 # To learn more, see https://pip.pypa.io/en/stable/reference/requirements-file-format/
 
-runpod==1.6.0
+runpod==1.6.2
