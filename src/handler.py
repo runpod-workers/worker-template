@@ -12,7 +12,7 @@ def handler(job):
 
     name = job_input.get('name', 'World')
 
-    return f"Bye, {name}!"
+    return f"You are amazing, {name}!"
 
 
 runpod.serverless.start({"handler": handler})
