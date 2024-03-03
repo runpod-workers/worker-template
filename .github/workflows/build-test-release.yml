@@ -20,6 +20,18 @@ jobs:
     # If you would like to use this workflow, you can replace DO with ubuntu-latest or any other runner.
 
     steps:
+      
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Minor version for each merge
+        id: taggerDryRun
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: true
+          
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
