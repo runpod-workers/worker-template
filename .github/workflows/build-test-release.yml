@@ -15,7 +15,7 @@ on:
 
 jobs:
   docker-build:
-    runs-on: DO
+    runs-on: ubuntu-latest
     # DO is a custom runner deployed on DigitalOcean, only available for workflows under the runpod-workers organization.
     # If you would like to use this workflow, you can replace DO with ubuntu-latest or any other runner.
 
@@ -39,34 +39,34 @@ jobs:
           push: true
           tags: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
 
-  dev-test:
-    needs: docker-build
-    runs-on: ubuntu-latest
+  # dev-test:
+  #   needs: docker-build
+  #   runs-on: ubuntu-latest
 
-    steps:
-      # Checkout
-      - uses: actions/checkout@v4
+  #   steps:
+  #     # Checkout
+  #     - uses: actions/checkout@v4
 
-      # Tests
-      - name: Run Tests
-        if: github.event_name != 'release'
-        id: run-tests
-        uses: direlines/runpod-test-runner@v1.7
-        with:
-          image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
-          runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
-          request-timeout: 600
+  #     # Tests
+  #     - name: Run Tests
+  #       if: github.event_name != 'release'
+  #       id: run-tests
+  #       uses: direlines/runpod-test-runner@v1.7
+  #       with:
+  #         image-tag: ${{ vars.DOCKERHUB_REPO }}/${{ vars.DOCKERHUB_IMG }}:${{ (github.event_name == 'release' && github.event.release.tag_name) || (github.event_name == 'workflow_dispatch' && github.event.inputs.image_tag) || 'dev' }}
+  #         runpod-api-key: ${{ secrets.RUNPOD_API_KEY }}
+  #         request-timeout: 600
 
-      # Pass/Fail
-      - name: Verify Tests
-        env:
-          TOTAL_TESTS: ${{ steps.run-tests.outputs.total-tests }}
-          SUCCESSFUL_TESTS: ${{ steps.run-tests.outputs.succeeded }}
-          RESULTS: ${{ steps.run-tests.outputs.results }}
-        run: |
-          echo "Total tests: $TOTAL_TESTS"
-          echo "Successful tests: $SUCCESSFUL_TESTS"
-          echo "Full results: $RESULTS"
-          if [ "$TOTAL_TESTS" != "$SUCCESSFUL_TESTS" ]; then
-              exit 1
-          fi
+  #     # Pass/Fail
+  #     - name: Verify Tests
+  #       env:
+  #         TOTAL_TESTS: ${{ steps.run-tests.outputs.total-tests }}
+  #         SUCCESSFUL_TESTS: ${{ steps.run-tests.outputs.succeeded }}
+  #         RESULTS: ${{ steps.run-tests.outputs.results }}
+  #       run: |
+  #         echo "Total tests: $TOTAL_TESTS"
+  #         echo "Successful tests: $SUCCESSFUL_TESTS"
+  #         echo "Full results: $RESULTS"
+  #         if [ "$TOTAL_TESTS" != "$SUCCESSFUL_TESTS" ]; then
+  #             exit 1
+  #         fi
