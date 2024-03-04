@@ -8,9 +8,9 @@ FROM runpod/base:0.4.0-cuda11.8.0
 
 
 # --- Optional: System dependencies ---
-# COPY builder/setup.sh /setup.sh
-# RUN /bin/bash /setup.sh && \
-#     rm /setup.sh
+COPY builder/setup.sh /setup.sh
+RUN /bin/bash /setup.sh && \
+    rm /setup.sh
 
 
 # Python dependencies
