@@ -17,9 +17,14 @@ def handler(job):
 
     print("Downloading example.mp3")
     url = "https://github.com/deezer/spleeter/raw/master/audio_example.mp3"
+
     destination_path = "example.mp3"
     urllib.request.urlretrieve(url, destination_path)
     print("Downloaded example.mp3")
+    # print complete path of the file
+    print("Downloaded file path: ", destination_path)
+    # print current working directory
+    print("Current working directory: ", os.getcwd())
 
     print("Initializing separator")
     demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", "example.mp3"])
