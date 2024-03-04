@@ -17,6 +17,10 @@ RUN python3.11 -m pip install --upgrade pip && \
     python3.11 -m pip install --upgrade -r /requirements.txt --no-cache-dir && \
     rm /requirements.txt
 
+COPY builder/setup.sh /setup.sh
+RUN /bin/bash /setup.sh && \
+    rm /setup.sh
+
 # NOTE: The base image comes with multiple Python versions pre-installed.
 #       It is recommended to specify the version of Python when running your code.
 
