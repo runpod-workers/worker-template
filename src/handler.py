@@ -3,14 +3,27 @@
 import os
 import runpod
 import dotenv
+import urllib.request
+import demucs.separate
 
 dotenv.load_dotenv()
 # If your handler runs inference on a model, load the model here.
 # You will want models to be loaded into memory before starting serverless.
 
 def handler(job):
+
     """ Handler function that will be used to process jobs. """
     job_input = job['input']
+
+    print("Downloading example.mp3")
+    url = "https://github.com/deezer/spleeter/raw/master/audio_example.mp3"
+    destination_path = "example.mp3"
+    urllib.request.urlretrieve(url, destination_path)
+    print("Downloaded example.mp3")
+
+    print("Initializing separator")
+    demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", "example.mp3"])
+    print("Separation done")
     name = job_input.get('name', 'World')
     return f"You are THE BEST <3, {name}!"
 
