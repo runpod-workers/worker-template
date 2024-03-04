@@ -12,7 +12,7 @@ def handler(job):
     """ Handler function that will be used to process jobs. """
     job_input = job['input']
     name = job_input.get('name', 'World')
-    return f"You are WOW, {name}!"
+    return f"You are THE BEST <3, {name}!"
 
 if not os.environ.get("DEV", False):
     runpod.serverless.start({"handler": handler})
