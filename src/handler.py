@@ -13,7 +13,7 @@ def handler(job):
     name = job_input.get('name', 'World')
     return f"You are WOW, {name}!"
 
-if not os.environ["LOCAL"]:
+if not os.environ.get("LOCAL", False):
     runpod.serverless.start({"handler": handler})
 else:
     # serve this using fastapi
