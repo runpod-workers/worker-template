@@ -25,7 +25,7 @@ def handler(job):
     demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", "example.mp3"])
     print("Separation done")
     name = job_input.get('name', 'World')
-    return f"You are THE BEST <3, {name}!"
+    return f"You are THE BESTESTESTEST BBB, {name}!"
 
 if not os.environ.get("DEV", False):
     runpod.serverless.start({"handler": handler})
