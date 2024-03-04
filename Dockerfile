@@ -8,9 +8,9 @@ FROM runpod/serverless-hello-world:latest
 # IMPORTANT: The base image overrides the default huggingface cache location.
 
 # # --- Optional: System dependencies ---
-# COPY builder/setup.sh /setup.sh
-# RUN /bin/bash /setup.sh && \
-#     rm /setup.sh
+COPY builder/setup.sh /setup.sh
+RUN /bin/bash /setup.sh && \
+    rm /setup.sh
 
 # Python dependencies
 COPY builder/requirements.txt /requirements.txt
