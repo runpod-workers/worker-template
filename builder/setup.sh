@@ -8,7 +8,7 @@ apt-get update && apt-get upgrade -y # Update System
 
 # Install System Dependencies
 # - openssh-server: for ssh access and web terminal
-apt-get install -y --no-install-recommends software-properties-common curl git openssh-server
+# apt-get install -y --no-install-recommends software-properties-common curl git openssh-server
 
 apt install ffmpeg
 # Install Python 3.10
@@ -23,3 +23,7 @@ python3 get-pip.py
 
 # Clean up, remove unnecessary packages and help reduce image size
 apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+sudo rm -rf /usr/share/dotnet
+sudo rm -rf /opt/ghc
+sudo rm -rf "/usr/local/share/boost"
+sudo rm -rf "$AGENT_TOOLSDIRECTORY"
