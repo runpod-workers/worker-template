@@ -5,7 +5,9 @@ import runpod
 import dotenv
 import urllib.request
 import demucs.separate
+import boto3
 
+# Replace 'your_access_key_id' and 'your_secret_access_key' with the actual credentials
 dotenv.load_dotenv()
 # If your handler runs inference on a model, load the model here.
 # You will want models to be loaded into memory before starting serverless.
@@ -14,23 +16,26 @@ def handler(job):
 
     """ Handler function that will be used to process jobs. """
     job_input = job['input']
+    song_name = job_input.get('song_name')
+    url = job_input.get('url')
 
-    print("Downloading example.mp3")
-    url = "https://github.com/deezer/spleeter/raw/master/audio_example.mp3"
-
-    destination_path = "example.mp3"
+    print(f"Downloading {song_name}")
+    destination_path = f"{song_name}.mp3"
     urllib.request.urlretrieve(url, destination_path)
-    print("Downloaded example.mp3")
-    # print complete path of the file
+    print(f"Downloaded {song_name}")
+
     print("Downloaded file path: ", destination_path)
-    # print current working directory
     print("Current working directory: ", os.getcwd())
 
     print("Initializing separator")
-    demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", "example.mp3"])
+    demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", f"{song_name}.mp3"])
     print("Separation done")
-    name = job_input.get('name', 'World')
-    return f"You are THE BESTESTESTEST BBB, {name}!"
+    s3 = boto3.client('s3', aws_access_key_id=os.environ.get('AWS_S3_ACCESS_ID'), aws_secret_access_key=os.environ.get('AWS_S3_ACCESS_KEY'))
+    
+    s3.upload_file(f"separated/mdx_extra/{song_name}/vocals.mp3", 'auto-karaoke', f'{song_name}/vocals.mp3')
+    s3.upload_file(f"separated/mdx_extra/{song_name}/no_vocals.mp3", 'auto-karaoke', f'{song_name}/no_vocals.mp3')
+
+    return f"Uploaded spleeeted!"
 
 if not os.environ.get("DEV", False):
     runpod.serverless.start({"handler": handler})
