@@ -15,18 +15,11 @@ def handler(job):
     """ Handler function that will be used to process jobs. """
     job_input = job['input']
     song_name = job_input.get('song_name')
-    url = job_input.get('url')
 
-    print(f"Downloading {song_name}")
-    destination_path = f"{song_name}.mp3"
-    urllib.request.urlretrieve(url, destination_path)
-    print(f"Downloaded {song_name}")
-
-    print("Downloaded file path: ", destination_path)
-    print("Current working directory: ", os.getcwd())
+    s3.download_file('auto-karaoke', f'{song_name}/base_song.mp3', f'{song_name}.mp3')
 
     print("Initializing separator")
-    demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", f"{song_name}.mp3"])
+    demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", f'{song_name}.mp3'])
     print("Separation done")
     
     s3.upload_file(f"separated/mdx_extra/{song_name}/vocals.mp3", 'auto-karaoke', f'{song_name}/vocals.mp3')
@@ -37,7 +30,6 @@ def handler(job):
 if not os.environ.get("DEV", False):
     runpod.serverless.start({"handler": handler})
 else:
-    # serve this using fastapi
     import uvicorn
     from fastapi import FastAPI
     import json
