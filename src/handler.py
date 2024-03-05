@@ -7,10 +7,8 @@ import urllib.request
 import demucs.separate
 import boto3
 
-# Replace 'your_access_key_id' and 'your_secret_access_key' with the actual credentials
 dotenv.load_dotenv()
-# If your handler runs inference on a model, load the model here.
-# You will want models to be loaded into memory before starting serverless.
+s3 = boto3.client('s3', aws_access_key_id=os.environ.get('AWS_S3_ACCESS_ID'), aws_secret_access_key=os.environ.get('AWS_S3_ACCESS_KEY'))
 
 def handler(job):
 
@@ -30,7 +28,6 @@ def handler(job):
     print("Initializing separator")
     demucs.separate.main(["--mp3", "--two-stems", "vocals", "-n", "mdx_extra", f"{song_name}.mp3"])
     print("Separation done")
-    s3 = boto3.client('s3', aws_access_key_id=os.environ.get('AWS_S3_ACCESS_ID'), aws_secret_access_key=os.environ.get('AWS_S3_ACCESS_KEY'))
     
     s3.upload_file(f"separated/mdx_extra/{song_name}/vocals.mp3", 'auto-karaoke', f'{song_name}/vocals.mp3')
     s3.upload_file(f"separated/mdx_extra/{song_name}/no_vocals.mp3", 'auto-karaoke', f'{song_name}/no_vocals.mp3')
