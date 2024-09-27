@@ -1,0 +1,116 @@
+{
+    "versions": {
+        "version_number": {
+            "imageName": "DOCKER_IMAGE_NAME:TAG",
+            "minimumCudaVersion": "MINUMUM_CUDA_VERSION",
+            "categories": [
+                {
+                    "title": "CATEGORY_GROUP_TITLE_DISPLAYED_IN_UI",
+                    "settings": [
+                        "SCHEMA_SETTING_KEY_0", "SCHEMA_SETTING_KEY_2", "SCHEMA_SETTING_KEY_3",
+                        "SCHEMA_SETTING_KEY_4"
+                    ]
+                },
+                {
+                    "title": "CATEGORY_GROUP_TITLE_DISPLAYED_IN_UI_2",
+                    "settings": [
+                        "SCHEMA_SETTING_KEY_5", "SCHEMA_SETTING_KEY_6", "SCHEMA_SETTING_KEY_7"
+                    ]
+                },
+                {
+                    "title": "CATEGORY_GROUP_TITLE_DISPLAYED_IN_UI_3",
+                    "settings": [
+                        "SCHEMA_SETTING_KEY_8", "SCHEMA_SETTING_KEY_9"
+                    ]
+                }
+            ]
+        },
+        "0.5.4": {
+            "imageName": "runpod/ai-api-sdxl:1.2.1",
+            "minimumCudaVersion": "11.8",
+            "categories": [
+                {
+                    "title": "LLM Settings",
+                    "settings": [
+                        "TOKENIZER", "MAX_NUM_SEQS", "LOAD_FORMAT"
+                    ]
+                },
+                {
+                    "title": "Serverless Settings",
+                    "settings": [
+                        "DISABLE_LOG_STATS"
+                    ]
+                }
+            ]
+        },
+        "0.4.2": {
+            "imageName": "runpod/ai-api-sdxl:1.0.5",
+            "minimumCudaVersion": "11.6",
+            "categories": [
+                {
+                    "title": "LLM Settings",
+                    "settings": [
+                        "TOKENIZER"
+                    ]
+                },
+                {
+                    "title": "Serverless Settings",
+                    "settings": [
+                        "DISABLE_LOG_STATS"
+                    ]
+                }
+            ]
+        }
+    },
+    "schema": {
+        "SCHEMA_SETTING_KEY": {
+            "env_var_name": "ENV_VAR_NAME_ON_DEPLOYMENT",
+            "value": "DEFAULT_VALUE",
+            "title": "TITLE_DISPLAYED_IN_UI_FORM",
+            "description": "DESCRIPTION_DISPLAYED_IN_UI_FORM",
+            "required": "BOOLEAN_IF_ENV_VAR_MUST_BE_SET_BY_USER",
+            "type": "TYPE_OF_FORM_INPUT_FIELD (text, number, toggle, or select))"
+        },
+        "TOKENIZER": {
+            "env_var_name": "TOKENIZER",
+            "value": "",
+            "title": "Tokenizer",
+            "description": "Name or path of the Hugging Face tokenizer to use.",
+            "required": false,
+            "type": "text"
+        },
+        "MAX_NUM_SEQS": {
+            "env_var_name": "MAX_NUM_SEQS",
+            "value": 256,
+            "title": "Max Num Seqs",
+            "description": "Maximum number of sequences per iteration.",
+            "required": false,
+            "type": "number"
+        },
+        "DISABLE_LOG_STATS": {
+            "env_var_name": "DISABLE_LOG_STATS",
+            "value": false,
+            "title": "Disable Log Stats",
+            "description": "Disable logging statistics.",
+            "required": false,
+            "type": "toggle"
+        },
+        "LOAD_FORMAT": {
+            "env_var_name": "LOAD_FORMAT",
+            "value": "auto",
+            "title": "Load Format",
+            "description": "The format of the model weights to load.",
+            "required": false,
+            "type": "select",
+            "options": [
+              { "value": "auto", "label": "auto" },
+              { "value": "pt", "label": "pt" },
+              { "value": "safetensors", "label": "safetensors" },
+              { "value": "npcache", "label": "npcache" },
+              { "value": "dummy", "label": "dummy" },
+              { "value": "tensorizer", "label": "tensorizer" },
+              { "value": "bitsandbytes", "label": "bitsandbytes" }
+            ]
+        }
+    }
+}
