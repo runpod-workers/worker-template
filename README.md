@@ -1,172 +1,100 @@
-<div align="center">
+# Worker Template
 
-<h1>Template | Worker</h1>
+This repository serves as a starting point for creating your own custom RunPod Serverless worker. It provides a basic structure and configuration that you can build upon.
 
-[![CI | Test Handler](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/CI-test_handler.yml)
-&nbsp;
-[![CD | Build-Test-Release](https://github.com/runpod-workers/worker-template/actions/workflows/build-test-release.yml/badge.svg)](https://github.com/runpod-workers/worker-template/actions/workflows/build-test-release.yml)
+## Getting Started
 
-🚀 | A simple worker that can be used as a starting point to build your own custom RunPod Endpoint API worker.
-</div>
+1.  **Use this template:** Create a new repository based on this template or clone it directly.
+2.  **Customize:** Modify the code and configuration files to implement your specific task.
+3.  **Test:** Run your worker locally to ensure it functions correctly.
+4.  **Deploy:** Connect your repository to RunPod or build and push the Docker image manually.
 
-## 📖 | Getting Started
+## Customizing Your Worker
 
-1. Clone this repository.
-2. (Optional) Add DockerHub credentials to GitHub Secrets.
-3. Add your code to the `src` directory.
-4. Update the `handler.py` file to load models and process requests.
-5. Add any dependencies to the `requirements.txt` file.
-6. Add any other build time scripts to the`builder` directory, for example, downloading models.
-7. Update the `Dockerfile` to include any additional dependencies.
-8. Replace the template `worker-config.json` file with your own (the template one is an example from our [vLLM worker](https://github.com/runpod-workers/worker-vllm)).
+- **`src/handler.py`:** This is the core of your worker.
+  - The `handler(event)` function is the entry point executed for each job.
+  - The `event` dictionary contains the job input under the `"input"` key.
+  - Modify this function to load your models, process the input, and return the desired output.
+  - Consider implementing model loading outside the handler (e.g., globally or in an initialization function) if models are large and reused across jobs.
+- **`requirements.txt`:** Add any Python libraries your worker needs to this file. These will be installed via `uv` when the Docker image is built.
+- **`Dockerfile`:**
+  - This file defines the Docker image for your worker.
+  - It starts from a RunPod base image (`runpod/base`) which includes CUDA and common dependencies.
+  - It installs dependencies from `requirements.txt` using `uv`.
+  - It copies your `src` directory into the image.
+  - You might need to add system dependencies (`apt-get install ...`), environment variables (`ENV`), or other setup steps here if required by your specific application.
+- **`test_input.json`:** Modify this file to provide relevant sample input for local testing.
 
-### 🔧 | Worker Config
+## Testing Locally
 
-The `worker-config.json` is a JSON file that is used to build the form that helps users configure their serverless endpoint on the RunPod Web Interface.
+You can test your handler logic locally using the RunPod Python SDK.
 
-Note: This is a new feature and only works for workers that use one model 
+1.  **Create & Activate Virtual Environment:**
 
-<details>
-<summary>Writing your worker-config.json</summary>
+    ```bash
+    # Create venv (replace 'python3' if needed)
+    python3 -m venv venv
 
-The JSON consists of two main parts, schema and versions.
-- `schema`: Here you specify the form fields that will be displayed to the user.
-  - `env_var_name`: The name of the environment variable that is being set using the form field.
-  - `value`: This is the default value of the form field. It will be shown in the UI as such unless the user changes it.
-  - `title`: This is the title of the form field in the UI.
-  - `description`: This is the description of the form field in the UI.
-  - `required`: This is a boolean that specifies if the form field is required.
-  - `type`: This is the type of the form field. Options are:
-    - `text`: Environment variable is a string so user inputs text in form field.
-    - `select`: User selects one option from the dropdown. You must provide the `options` key value pair after type if using this.
-    - `toggle`: User toggles between true and false.
-    - `number`: User inputs a number in the form field.
-  - `options`: Specify the options the user can select from if the type is `select`. DO NOT include this unless the `type` is `select`.
-- `versions`: This is where you call the form fields specified in `schema` and organize them into categories.
-  - `imageName`: This is the name of the Docker image that will be used to run the serverless endpoint.
-  - `minimumCudaVersion`: This is the minimum CUDA version that is required to run the serverless endpoint.
-  - `categories`: This is where you call the keys of the form fields specified in `schema` and organize them into categories. Each category is a toggle list of forms on the Web UI.
-    - `title`: This is the title of the category in the UI.
-    - `settings`: This is the array of settings schemas specified in `schema` associated with the category.
+    # Activate venv
+    # macOS/Linux:
+    source venv/bin/activate
+    # Windows:
+    .\venv\Scripts\activate
+    ```
 
-<details>
-<summary>Example of schema</summary>
+2.  **Install Dependencies:**
+
+    ```bash
+    # Install requirements for local testing (includes runpod SDK)
+    # Ensure you have uv installed or use pip: pip install -r requirements.txt
+    uv pip install -r requirements.txt
+    ```
+
+3.  **Run the Handler:**
+    ```bash
+    # The script automatically uses test_input.json
+    python src/handler.py
+    ```
+    This will execute your `handler` function with the contents of `test_input.json` as input.
+
+## Deploying to RunPod
+
+There are two main ways to deploy your worker:
+
+1.  **GitHub Integration (Recommended):**
+
+    - Push your customized code to a GitHub repository.
+    - In the RunPod Serverless UI, create a new Template or Endpoint and connect it to your GitHub repository.
+    - RunPod will automatically build the Docker image using the `Dockerfile` in your repository whenever you push changes (if auto-deploy is enabled).
+
+2.  **Manual Docker Build & Push:**
+    - Build the Docker image:
+      ```bash
+      # Replace with your registry username and image name/tag
+      docker build -t your-dockerhub-username/your-image-name:latest --platform linux/amd64 .
+      ```
+    - Push the image to a container registry (like Docker Hub, GHCR, etc.):
+      ```bash
+      # Log in to your registry if needed (e.g., docker login)
+      docker push your-dockerhub-username/your-image-name:latest
+      ```
+    - In the RunPod Serverless UI, create a new Template or Endpoint and point it to the image you pushed in your container registry.
+
+## Further Information
+
+- **RunPod Serverless Documentation:** [https://docs.runpod.io/serverless/overview](https://docs.runpod.io/serverless/overview)
+- **Python SDK:** [https://github.com/runpod/runpod-python](https://github.com/runpod/runpod-python)
+- **Base Docker Images:** [https://github.com/runpod/containers/tree/main/official-templates/base](https://github.com/runpod/containers/tree/main/official-templates/base)
+- **Community Discord:** [https://runpod.io/discord](https://runpod.io/discord)
+
+## Example Input (`test_input.json`)
+
+The default input structure looks like this. Modify it for your specific needs.
 
 ```json
 {
-  "schema": {
-    "TOKENIZER": {
-      "env_var_name": "TOKENIZER",
-      "value": "",
-      "title": "Tokenizer",
-      "description": "Name or path of the Hugging Face tokenizer to use.",
-      "required": false,
-      "type": "text"
-    }, 
-    "TOKENIZER_MODE": {
-      "env_var_name": "TOKENIZER_MODE",
-      "value": "auto",
-      "title": "Tokenizer Mode",
-      "description": "The tokenizer mode.",
-      "required": false,
-      "type": "select",
-      "options": [
-        { "value": "auto", "label": "auto" },
-        { "value": "slow", "label": "slow" }
-      ]
-    },
-    ...
+  "input": {
+    "name": "John"
   }
 }
 ```
-</details>
-
-<details>
-<summary>Example of versions</summary>
-
-```json
-{
-  "versions": {
-    "0.5.4": {
-      "imageName": "runpod/worker-v1-vllm:v1.2.0stable-cuda12.1.0",
-      "minimumCudaVersion": "12.1",
-      "categories": [
-        {
-          "title": "LLM Settings",
-          "settings": [
-            "TOKENIZER", "TOKENIZER_MODE", "OTHER_SETTINGS_SCHEMA_KEYS_YOU_HAVE_SPECIFIED_0", ...
-          ]
-        },
-        {
-          "title": "Tokenizer Settings",
-          "settings": [
-            "OTHER_SETTINGS_SCHEMA_KEYS_0", "OTHER_SETTINGS_SCHEMA_KEYS_1", ...
-          ]
-        },
-        ...
-      ]
-    }
-  }
-}
-```
-</details>
-</details>
-
-
-
-
-
-### ⚙️ | CI/CD (GitHub Actions)
-
-As a reference this repository provides example CI/CD workflows to help you test your worker and build a docker image. The three main workflows are:
-
-1. `CI-test_handler.yml` - Tests the handler using the input provided by the `--test_input` argument when calling the file containing your handler.
-
-### Test Handler
-
-This workflow will validate that your handler works as expected. You may need to add some dependency installations to the `CI-test_handler.yml` file to ensure your handler can be tested.
-
-The action expects the following arguments to be available:
-
-- `vars.RUNNER_24GB` | The endpoint ID on RunPod for a 24GB runner.
-- `secrets.RUNPOD_API_KEY` | Your RunPod API key.
-- `secrets.GH_PAT` | Your GitHub Personal Access Token.
-- `vars.GH_ORG` | The GitHub organization that owns the repository, this is where the runner will be added to.
-
-### Test End-to-End
-
-This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
-
-- `DOCKERHUB_USERNAME` | Your DockerHub username for logging in.
-- `DOCKERHUB_TOKEN` | Your DockerHub token for logging in.
-
-Additionally, the following need to be added as GitHub actions variables:
-
-- `DOCKERHUB_REPO` | The name of the repository you want to push to.
-- `DOCKERHUB_IMG` | The name of the image you want to push to.
-
-The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
-
-The `CI-test_worker.yml` file will test the worker using the input provided by the `--test_input` argument when calling the file containing your handler. Be sure to update this workflow to install any dependencies you need to run your tests.
-
-## Example Input
-
-```json
-{
-    "input": {
-        "name": "John Doe"
-    }
-}
-```
-
-## 💡 | Best Practices
-
-System dependency installation, model caching, and other shell tasks should be added to the `builder/setup.sh` this will allow you to easily setup your Dockerfile as well as run CI/CD tasks.
-
-Models should be part of your docker image, this can be accomplished by either copying them into the image or downloading them during the build process.
-
-If using the input validation utility from the runpod python package, create a `schemas` python file where you can define the schemas, then import that file into your `handler.py` file.
-
-## 🔗 | Links
-
-🐳 [Docker Container](https://hub.docker.com/r/runpod/serverless-hello-world)
