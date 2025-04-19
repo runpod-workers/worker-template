@@ -55,7 +55,7 @@ You can test your handler logic locally using the RunPod Python SDK.
     # The script automatically uses test_input.json
     python src/handler.py
     ```
-    This will execute your `handler` function with the contents of `test_input.json` as input.
+    This will execute your `handler` function with the contents of [`test_input.json`](/test_input.json) as input.
 
 ## Deploying to RunPod
 
@@ -86,15 +86,3 @@ There are two main ways to deploy your worker:
 - **Python SDK:** [https://github.com/runpod/runpod-python](https://github.com/runpod/runpod-python)
 - **Base Docker Images:** [https://github.com/runpod/containers/tree/main/official-templates/base](https://github.com/runpod/containers/tree/main/official-templates/base)
 - **Community Discord:** [https://runpod.io/discord](https://runpod.io/discord)
-
-## Example Input (`test_input.json`)
-
-The default input structure looks like this. Modify it for your specific needs.
-
-```json
-{
-  "input": {
-    "name": "John"
-  }
-}
-```
