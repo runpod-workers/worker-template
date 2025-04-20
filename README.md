@@ -57,7 +57,7 @@ There are two main ways to deploy your worker:
 
 ## Further Information
 
-- **RunPod Serverless Documentation:** [https://docs.runpod.io/serverless/overview](https://docs.runpod.io/serverless/overview)
-- **Python SDK:** [https://github.com/runpod/runpod-python](https://github.com/runpod/runpod-python)
-- **Base Docker Images:** [https://github.com/runpod/containers/tree/main/official-templates/base](https://github.com/runpod/containers/tree/main/official-templates/base)
-- **Community Discord:** [https://runpod.io/discord](https://runpod.io/discord)
+- [RunPod Serverless Documentation](https://docs.runpod.io/serverless/overview)
+- [Python SDK](https://github.com/runpod/runpod-python)
+- [Base Docker Images](https://github.com/runpod/containers/tree/main/official-templates/base)
+- [Community Discord](https://discord.gg/cUpRmau42Vd)
