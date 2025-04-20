@@ -14,12 +14,12 @@ This repository serves as a starting point for creating your own custom RunPod S
 - **`src/handler.py`:** This is the core of your worker.
   - The `handler(event)` function is the entry point executed for each job.
   - The `event` dictionary contains the job input under the `"input"` key.
-  - Modify this function to load your models, process the input, and return the desired output.
+  - Modify this function to load your models, process the input and return the desired output.
   - Consider implementing model loading outside the handler (e.g., globally or in an initialization function) if models are large and reused across jobs.
 - **`requirements.txt`:** Add any Python libraries your worker needs to this file. These will be installed via `uv` when the Docker image is built.
 - **`Dockerfile`:**
   - This file defines the Docker image for your worker.
-  - It starts from a RunPod base image (`runpod/base`) which includes CUDA and common dependencies.
+  - It starts from a [RunPod base image (`runpod/base`)](https://github.com/runpod/containers/tree/main/official-templates/base) which includes CUDA, mulitple versions of python, uv, jupyter notebook and common dependencies.
   - It installs dependencies from `requirements.txt` using `uv`.
   - It copies your `src` directory into the image.
   - You might need to add system dependencies (`apt-get install ...`), environment variables (`ENV`), or other setup steps here if required by your specific application.
@@ -27,31 +27,12 @@ This repository serves as a starting point for creating your own custom RunPod S
 
 ## Testing Locally
 
-You can test your handler logic locally using the RunPod Python SDK.
+You can test your handler logic locally using the RunPod Python SDK. For detailed steps on setting up your local environment (creating a virtual environment, installing dependencies) and running the handler, please refer to the [RunPod Serverless Get Started Guide](https://docs.runpod.io/serverless/get-started).
 
-1.  **Create & Activate Virtual Environment:**
-
+1.  **Prepare Input:** Modify `test_input.json` with relevant sample input for your handler.
+2.  **Run the Handler:**
     ```bash
-    # Create venv (replace 'python3' if needed)
-    python3 -m venv venv
-
-    # Activate venv
-    # macOS/Linux:
-    source venv/bin/activate
-    # Windows:
-    .\venv\Scripts\activate
-    ```
-
-2.  **Install Dependencies:**
-
-    ```bash
-    # Install requirements for local testing (includes runpod SDK)
-    # Ensure you have uv installed or use pip: pip install -r requirements.txt
-    uv pip install -r requirements.txt
-    ```
-
-3.  **Run the Handler:**
-    ```bash
+    # Ensure your virtual environment is active and dependencies are installed
     # The script automatically uses test_input.json
     python src/handler.py
     ```
@@ -63,22 +44,12 @@ There are two main ways to deploy your worker:
 
 1.  **GitHub Integration (Recommended):**
 
-    - Push your customized code to a GitHub repository.
-    - In the RunPod Serverless UI, create a new Template or Endpoint and connect it to your GitHub repository.
-    - RunPod will automatically build the Docker image using the `Dockerfile` in your repository whenever you push changes (if auto-deploy is enabled).
+    - Connect your GitHub repository to RunPod Serverless. RunPod will automatically build and deploy your worker whenever you push changes to your specified branch.
+    - For detailed instructions on setting up the GitHub integration, authorizing RunPod, and configuring your deployment, please refer to the [RunPod Deploy with GitHub Guide](https://docs.runpod.io/serverless/github-integration).
 
 2.  **Manual Docker Build & Push:**
-    - Build the Docker image:
-      ```bash
-      # Replace with your registry username and image name/tag
-      docker build -t your-dockerhub-username/your-image-name:latest --platform linux/amd64 .
-      ```
-    - Push the image to a container registry (like Docker Hub, GHCR, etc.):
-      ```bash
-      # Log in to your registry if needed (e.g., docker login)
-      docker push your-dockerhub-username/your-image-name:latest
-      ```
-    - In the RunPod Serverless UI, create a new Template or Endpoint and point it to the image you pushed in your container registry.
+    - For detailed instructions on building the Docker image locally and pushing it to a container registry, please see the [RunPod Serverless Get Started Guide](https://docs.runpod.io/serverless/get-started#step-6-build-and-push-your-docker-image).
+    - Once pushed, create a new Template or Endpoint in the RunPod Serverless UI and point it to the image in your container registry.
 
 ## Further Information
 
