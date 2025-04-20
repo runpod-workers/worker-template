@@ -1,12 +1,12 @@
 {
-  "title": "RunPod Serverless Worker",
-  "description": "A starting point for creating your own custom RunPod Serverless worker. It provides a basic structure and configuration that you can build upon.",
+  "title": "Worker Template",
+  "description": "A starting point for creating your own custom serverless worker. It provides a basic structure and configuration that you can build upon.",
   "type": "serverless",
   "category": "language",
-  "iconUrl": "https://dummyimage.com/100x100/ff5733/fff&text=SW",
+  "iconUrl": "https://dummyimage.com/100x100/5733ff/fff&text=SW",
   "config": {
     "runsOn": "GPU",
-    "containerDiskInGb": 20,
+    "containerDiskInGb": 5,
     "gpuIds": "NVIDIA GeForce RTX 4090",
     "gpuCount": 1,
     "allowedCudaVersions": [
