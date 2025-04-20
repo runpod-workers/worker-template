@@ -1,10 +1,12 @@
 ![RunPod Worker Template](https://5ccaof7hvfzuzf4p.public.blob.vercel-storage.com/6alBFvrkrTGIkdpWJeawe_image-tXkyfhuu51FV41RaT5CsBS0xOZqlHO.jpeg)
 
-# RunPod Worker Template
-
-[![RunPod](https://img.shields.io/badge/RunPod-Ready-success)](https://runpod.io?ref=badge)
+---
 
 This repository serves as a starting point for creating your own custom RunPod Serverless worker. It provides a basic structure and configuration that you can build upon.
+
+[![RunPod](https://api.runpod.io/badge/runpod-workers/worker-template)](https://www.runpod.io/console/hub/runpod-workers/worker-template)
+
+---
 
 ## Getting Started
 
