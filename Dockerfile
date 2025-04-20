@@ -1,4 +1,4 @@
-FROM runpod/base:0.6.2-cuda11.8.0
+FROM runpod/base:0.6.3-cuda11.8.0
 
 # Install dependencies
 COPY requirements.txt /requirements.txt
