@@ -17,7 +17,7 @@ This repository serves as a starting point for creating your own custom RunPod S
 
 ## Customizing Your Worker
 
-- **`src/handler.py`:** This is the core of your worker.
+- **`handler.py`:** This is the core of your worker.
   - The `handler(event)` function is the entry point executed for each job.
   - The `event` dictionary contains the job input under the `"input"` key.
   - Modify this function to load your models, process the input and return the desired output.
@@ -38,9 +38,7 @@ You can test your handler logic locally using the RunPod Python SDK. For detaile
 1.  **Prepare Input:** Modify `test_input.json` with relevant sample input for your handler.
 2.  **Run the Handler:**
     ```bash
-    # Ensure your virtual environment is active and dependencies are installed
-    # The script automatically uses test_input.json
-    python src/handler.py
+    python handler.py
     ```
     This will execute your `handler` function with the contents of [`test_input.json`](/test_input.json) as input.
 

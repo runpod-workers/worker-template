@@ -8,8 +8,8 @@ RUN ln -sf $(which python3.11) /usr/local/bin/python && \
 COPY requirements.txt /requirements.txt
 RUN uv pip install --upgrade -r /requirements.txt --no-cache-dir --system
 
-# Add src files
-ADD src .
+# Add files
+ADD handler.py .
 
 # Run the handler
 CMD python -u /handler.py
