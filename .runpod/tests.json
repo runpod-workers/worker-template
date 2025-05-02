@@ -1,0 +1,1 @@
+{\n  "tests": [\n    {\n      "name": "Basic Functionality Test",\n      "description": "Tests the basic functionality of the worker",\n      "input": {\n        "input": "test input"\n      },\n      "expected_output": {\n        "output": "test output"\n      },\n      "timeout": 30\n    }\n  ]\n}
